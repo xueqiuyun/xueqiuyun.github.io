@@ -13,11 +13,11 @@ vue-router 默认是 hash 模式，在 url后面会有一个 # 号，在一些�
 -    =开头表示精确匹配  
 -    ~ 开头表示区分大小写的正则匹配  
 -    ~* 开头表示不区分大小写的正则匹配  
--    ^~ 开头表示uri以某个常规字符串 URI         开头进行匹配。nginx不对url做编码，因此      请求为/static/20%/aa，可以被规则^~          /static/ /aa匹配到（注意是空格）  
+-    ^~ 开头表示uri以某个常规字符串 URI开头进行匹配。nginx不对url做编码，因此请求为/static/20%/aa，可以被规则^~          /static/ /aa匹配到（注意是空格）  
 -    / 通用匹配，任何请求都会匹配到。  
     
 **root**  
-根路径配置，在匹配到 location 的 uri 路径后，指向 root 配置的路径，并把 uri 路径加在 root 路径后面。  
+根路径配置，在匹配到 location 的 uri 路径后，指向 root 配置的路径，并把 uri 路径加在 root 路径后面。 
 
 ```
 location /dist/ {
@@ -40,7 +40,8 @@ location /dist/ {
 
 **try_files** 
 
-try_file 的作用类似与重定向 
+try_file 的作用类似与重定向  
+
 ```
 location /dist/ {
     alias /home/mine/files/;
@@ -52,14 +53,17 @@ location /dist/ {
 **Vue Router配置**  
 
 当设置了 mode 为 history 时，Vue Router 有一个 base 的配置，假如 SPA 放入在一个 [host]/dist/ 服务下时，可以将 base 设置为 /dist/  
-此时 nginx 的配置可以更新为：  
+此时 nginx 的配置可以更新为： 
+
+
 ```
 location /dist {
     alias /home/mine/files;
     index inde.html;
     try_files $uri $uri/ /dist/index.html;
 }
-```  
+``` 
+
 将打包之后的代码放入 /home/mine/files 根目录下。
  
 
