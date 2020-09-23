@@ -465,17 +465,18 @@
 <li>=开头表示精确匹配  </li>
 <li>~ 开头表示区分大小写的正则匹配  </li>
 <li>~* 开头表示不区分大小写的正则匹配  </li>
-<li>^~ 开头表示uri以某个常规字符串 URI         开头进行匹配。nginx不对url做编码，因此      请求为/static/20%/aa，可以被规则^~          /static/ /aa匹配到（注意是空格）  </li>
+<li>^~ 开头表示uri以某个常规字符串 URI开头进行匹配。nginx不对url做编码，因此请求为/static/20%/aa，可以被规则^~          /static/ /aa匹配到（注意是空格）  </li>
 <li>/ 通用匹配，任何请求都会匹配到。  </li>
 </ul>
-<p><strong>root</strong><br>根路径配置，在匹配到 location 的 uri 路径后，指向 root 配置的路径，并把 uri 路径加在 root 路径后面。  </p>
+<p><strong>root</strong><br>根路径配置，在匹配到 location 的 uri 路径后，指向 root 配置的路径，并把 uri 路径加在 root 路径后面。 </p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">location &#x2F;dist&#x2F; &#123;</span><br><span class="line">    root &#x2F;home&#x2F;mine&#x2F;files&#x2F;;</span><br><span class="line">&#125;</span><br><span class="line">&#96;&#96;&#96;  </span><br><span class="line"></span><br><span class="line">当我访问 http:&#x2F;&#x2F;[host]&#x2F;dist&#x2F;test.png 时，实际上返回的文件路径为 &#x2F;home&#x2F;mine&#x2F;files&#x2F;dist&#x2F;test.png  </span><br><span class="line"></span><br><span class="line">**alias**  </span><br><span class="line">别名配置，在匹配到 location 的 uri 路径后，指向 alias 配置的路径。  </span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p>location /dist/ {<br>    alias  /home/mine/files/;<br>}</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">当我访问 http:&#x2F;&#x2F;[host]&#x2F;dist&#x2F;test.png 时，实际上返回的文件路径为 &#x2F;home&#x2F;mine&#x2F;files&#x2F;test.png</span><br><span class="line"></span><br><span class="line">**try_files** </span><br><span class="line"></span><br><span class="line">try_file 的作用类似与重定向 </span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">当我访问 http:&#x2F;&#x2F;[host]&#x2F;dist&#x2F;test.png 时，实际上返回的文件路径为 &#x2F;home&#x2F;mine&#x2F;files&#x2F;test.png</span><br><span class="line"></span><br><span class="line">**try_files** </span><br><span class="line"></span><br><span class="line">try_file 的作用类似与重定向  </span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p>location /dist/ {<br>    alias /home/mine/files/;<br>    try_files $uri $uri/ /dist/index.html;<br>}</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">当访问 http:&#x2F;&#x2F;[host]&#x2F;dist&#x2F;example时，try_files 首先会在 &#x2F;home&#x2F;mine&#x2F;files&#x2F; 目录下找是否有 example 这个文件，有则返回，未找到则找是否有 example 这个目录，有则返回，未找到则发起一个服务器内部发起重定向请求到 http:&#x2F;&#x2F;localhost&#x2F;dist&#x2F;index.html </span><br><span class="line"></span><br><span class="line">**Vue Router配置**  </span><br><span class="line"></span><br><span class="line">当设置了 mode 为 history 时，Vue Router 有一个 base 的配置，假如 SPA 放入在一个 [host]&#x2F;dist&#x2F; 服务下时，可以将 base 设置为 &#x2F;dist&#x2F;  </span><br><span class="line">此时 nginx 的配置可以更新为：  </span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">当访问 http:&#x2F;&#x2F;[host]&#x2F;dist&#x2F;example时，try_files 首先会在 &#x2F;home&#x2F;mine&#x2F;files&#x2F; 目录下找是否有 example 这个文件，有则返回，未找到则找是否有 example 这个目录，有则返回，未找到则发起一个服务器内部发起重定向请求到 http:&#x2F;&#x2F;localhost&#x2F;dist&#x2F;index.html </span><br><span class="line"></span><br><span class="line">**Vue Router配置**  </span><br><span class="line"></span><br><span class="line">当设置了 mode 为 history 时，Vue Router 有一个 base 的配置，假如 SPA 放入在一个 [host]&#x2F;dist&#x2F; 服务下时，可以将 base 设置为 &#x2F;dist&#x2F;  </span><br><span class="line">此时 nginx 的配置可以更新为： </span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p>location /dist {<br>    alias /home/mine/files;<br>    index inde.html;<br>    try_files $uri $uri/ /dist/index.html;<br>}</p>
-<pre><code>将打包之后的代码放入 /home/mine/files 根目录下。
+<pre><code>
+将打包之后的代码放入 /home/mine/files 根目录下。
 
 
 </code></pre>
@@ -711,13 +712,13 @@
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
             <div class="card">
-                <a href="/2020/09/21/hello-world/">
+                <a href="/2020/09/03/test/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="Hello World">
+                        <img src="/medias/featureimages/22.jpg" class="responsive-img" alt="vue路由history模式">
                         
-                        <span class="card-title">Hello World</span>
+                        <span class="card-title">vue路由history模式</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -728,7 +729,7 @@
                     </div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-09-21
+                            <i class="far fa-clock fa-fw icon-date"></i>2020-09-03
                         </span>
                         <span class="publish-author">
                             
@@ -745,10 +746,10 @@
         
         <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge right-badge text-color">
-                Next&nbsp;<i class="fas fa-chevron-right"></i>
+                Current&nbsp;<i class="far fa-dot-circle"></i>
             </div>
             <div class="card">
-                <a href="/2020/09/03/test/">
+                <a href="/2020/09/03/vue%E8%B7%AF%E7%94%B1history%E9%85%8D%E7%BD%AE/">
                     <div class="card-image">
                         
                         
@@ -775,6 +776,7 @@
                         </span>
                     </div>
                 </div>
+
                 
             </div>
         </div>
