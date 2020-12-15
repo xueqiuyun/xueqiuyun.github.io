@@ -29,7 +29,7 @@
 
     <script src="/libs/jquery/jquery.min.js"></script>
 
-<meta name="generator" content="Hexo 5.1.1"></head>
+<meta name="generator" content="Hexo 5.1.1"><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
 
 
 <body>
@@ -469,17 +469,30 @@
 <li>/ 通用匹配，任何请求都会匹配到。  </li>
 </ul>
 <p><strong>root</strong><br>根路径配置，在匹配到 location 的 uri 路径后，指向 root 配置的路径，并把 uri 路径加在 root 路径后面。 </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">location &#x2F;dist&#x2F; &#123;</span><br><span class="line">    root &#x2F;home&#x2F;mine&#x2F;files&#x2F;;</span><br><span class="line">&#125;</span><br><span class="line">&#96;&#96;&#96;  </span><br><span class="line"></span><br><span class="line">当我访问 http:&#x2F;&#x2F;[host]&#x2F;dist&#x2F;test.png 时，实际上返回的文件路径为 &#x2F;home&#x2F;mine&#x2F;files&#x2F;dist&#x2F;test.png  </span><br><span class="line"></span><br><span class="line">**alias**  </span><br><span class="line">别名配置，在匹配到 location 的 uri 路径后，指向 alias 配置的路径。  </span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>location /dist/ {<br>    alias  /home/mine/files/;<br>}</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">当我访问 http:&#x2F;&#x2F;[host]&#x2F;dist&#x2F;test.png 时，实际上返回的文件路径为 &#x2F;home&#x2F;mine&#x2F;files&#x2F;test.png</span><br><span class="line"></span><br><span class="line">**try_files** </span><br><span class="line"></span><br><span class="line">try_file 的作用类似与重定向  </span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>location /dist/ {<br>    alias /home/mine/files/;<br>    try_files $uri $uri/ /dist/index.html;<br>}</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">当访问 http:&#x2F;&#x2F;[host]&#x2F;dist&#x2F;example时，try_files 首先会在 &#x2F;home&#x2F;mine&#x2F;files&#x2F; 目录下找是否有 example 这个文件，有则返回，未找到则找是否有 example 这个目录，有则返回，未找到则发起一个服务器内部发起重定向请求到 http:&#x2F;&#x2F;localhost&#x2F;dist&#x2F;index.html </span><br><span class="line"></span><br><span class="line">**Vue Router配置**  </span><br><span class="line"></span><br><span class="line">当设置了 mode 为 history 时，Vue Router 有一个 base 的配置，假如 SPA 放入在一个 [host]&#x2F;dist&#x2F; 服务下时，可以将 base 设置为 &#x2F;dist&#x2F;  </span><br><span class="line">此时 nginx 的配置可以更新为： </span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>location /dist {<br>    alias /home/mine/files;<br>    index inde.html;<br>    try_files $uri $uri/ /dist/index.html;<br>}</p>
-<pre><code>
-将打包之后的代码放入 /home/mine/files 根目录下。
-
-
-</code></pre>
+<pre><code>location /dist/ &#123;
+    root /home/mine/files/;
+&#125;</code></pre>
+<p>当我访问 http://[host]/dist/test.png 时，实际上返回的文件路径为 /home/mine/files/dist/test.png  </p>
+<p><strong>alias</strong><br>别名配置，在匹配到 location 的 uri 路径后，指向 alias 配置的路径。  </p>
+<pre><code>location /dist/ &#123;
+    alias  /home/mine/files/;
+&#125;</code></pre>
+<p>当我访问 http://[host]/dist/test.png 时，实际上返回的文件路径为 /home/mine/files/test.png</p>
+<p><strong>try_files</strong> </p>
+<p>try_file 的作用类似与重定向  </p>
+<pre><code>location /dist/ &#123;
+    alias /home/mine/files/;
+    try_files $uri $uri/ /dist/index.html;
+&#125;</code></pre>
+<p>当访问 http://[host]/dist/example时，try_files 首先会在 /home/mine/files/ 目录下找是否有 example 这个文件，有则返回，未找到则找是否有 example 这个目录，有则返回，未找到则发起一个服务器内部发起重定向请求到 <a target="_blank" rel="noopener" href="http://localhost/dist/index.html">http://localhost/dist/index.html</a> </p>
+<p><strong>Vue Router配置</strong>  </p>
+<p>当设置了 mode 为 history 时，Vue Router 有一个 base 的配置，假如 SPA 放入在一个 [host]/dist/ 服务下时，可以将 base 设置为 /dist/<br>此时 nginx 的配置可以更新为： </p>
+<pre><code>location /dist &#123;
+    alias /home/mine/files;
+    index inde.html;
+    try_files $uri $uri/ /dist/index.html;
+&#125;</code></pre>
+<p>将打包之后的代码放入 /home/mine/files 根目录下。</p>
 
             </div>
             <hr/>
@@ -505,7 +518,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://example.com/2020/09/03/vue%E8%B7%AF%E7%94%B1history%E9%85%8D%E7%BD%AE/">http://example.com/2020/09/03/vue%E8%B7%AF%E7%94%B1history%E9%85%8D%E7%BD%AE/</a>
+                    <a href="http://xueqiuyun.github.io/2020/09/03/vue%E8%B7%AF%E7%94%B1history%E9%85%8D%E7%BD%AE/">http://xueqiuyun.github.io/2020/09/03/vue%E8%B7%AF%E7%94%B1history%E9%85%8D%E7%BD%AE/</a>
                 </span>
             </div>
             <div class="reprint__notice">
